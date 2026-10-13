@@ -11,7 +11,7 @@ heading.textContent = "Cauldron Clicker";
 
 // this will eventually be used for when upgrades are added
 const clicksPerSecond = document.createElement("p");
-const CPS: number = 1; // update this to let whenever we make the upgrades
+let CPS: number = 1; // update this to let whenever we make the upgrades
 clicksPerSecond.textContent = "Ounce per second: " + CPS.toString();
 
 //=============== Image ====================
@@ -36,15 +36,34 @@ refreshText();
 // ========= Money ============================
 let money: number = 0;
 const moneyText = document.createElement("p");
-moneyText.textContent = "Money: " + "$" + money;
+refreshMoney();
 
 // =========== Sell Button =========================
 const sellButton = document.createElement("button");
 sellButton.textContent = "Sell potions";
 sellButton.type = "button";
 
+function timer() {
+  let last = performance.now();
+  setInterval(
+    () => {
+      const now = performance.now();
+      const seconds = (now - last) / 1000;
+      last = now;
+      counter += CPS * seconds;
+      refreshText();
+    },
+    100,
+  );
+}
+timer();
+
 function refreshText() {
-  counterElement.textContent = counter.toString() + " oz";
+  counterElement.textContent = counter.toFixed(1) + " oz";
+}
+
+function refreshMoney() {
+  moneyText.textContent = "Money: $" + money.toFixed(2);
 }
 
 function count() {
@@ -54,8 +73,8 @@ function count() {
 function sellPotion() {
   money += counter;
   counter = 0;
-  moneyText.textContent = "Money: " + "$" + money;
   refreshText();
+  refreshMoney();
 }
 
 sellButton.addEventListener("click", () => {
