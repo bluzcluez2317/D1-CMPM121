@@ -12,23 +12,27 @@ heading.textContent = "Cauldron Clicker";
 const image = document.createElement("img");
 image.src = tileUrl;
 image.alt = "A teal tile with a cream circle";
-image.width = 400;
-image.height = 400;
+image.width = 500;
+image.height = 500;
 
 const message = document.createElement("p");
-message.textContent = "Click Cauldron";
+message.textContent = "Click on the Cauldron to make potions";
 
 // Counts the amount of times the image has been clicked
 let counter: number = 0;
 const counterText = document.createElement("p");
 counterText.textContent = "Ounces of potion: ";
 const counterElement = document.createElement("span");
-counterElement.textContent = counter.toString() + " oz";
 counterText.appendChild(counterElement); // puts counter element number on the page
 app.append(heading, image, message, counterText);
 
 image.addEventListener("click", () => {
   counter++;
   counterElement.textContent = counter.toString() + " oz";
-  //console.log("Counter: " + counter);
+  image.animate(
+    [{ transform: "scale(1)" }, { transform: "scale(1.1)" }, {
+      transform: "scale(1)",
+    }],
+    { duration: 200 },
+  );
 });
