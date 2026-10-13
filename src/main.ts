@@ -9,15 +9,22 @@ app.style.textAlign = "center";
 const heading = document.createElement("h1");
 heading.textContent = "Cauldron Clicker";
 
+// this will eventually be used for when upgrades are added
+const clicksPerSecond = document.createElement("p");
+const CPS: number = 1; // update this to let whenever we make the upgrades
+clicksPerSecond.textContent = "Ounce per second: " + CPS.toString();
+
+//=============== Image ====================
 const image = document.createElement("img");
 image.src = tileUrl;
 image.alt = "A cauldron with pink bubbles.";
-image.width = 500;
-image.height = 500;
+image.width = 400;
+image.height = 400;
 
-const message = document.createElement("p");
+const message = document.createElement("h3");
 message.textContent = "Click on the Cauldron to make potions!";
 
+// ============= Potion Text and Info =============================================
 // Counts the amount of times the image has been clicked
 let counter: number = 0;
 const counterText = document.createElement("p");
@@ -26,10 +33,15 @@ const counterElement = document.createElement("span");
 counterText.appendChild(counterElement); // puts counter element number on the page
 refreshText();
 
-// how to add buttons VVVVVVV
-// const button = document.createElement("button");
-// button.textContent = "Testing";
-// button.type = "button";
+// ========= Money ============================
+let money: number = 0;
+const moneyText = document.createElement("p");
+moneyText.textContent = "Money: " + "$" + money;
+
+// =========== Sell Button =========================
+const sellButton = document.createElement("button");
+sellButton.textContent = "Sell potions";
+sellButton.type = "button";
 
 function refreshText() {
   counterElement.textContent = counter.toString() + " oz";
@@ -38,6 +50,17 @@ function refreshText() {
 function count() {
   counter++;
 }
+
+function sellPotion() {
+  money += counter;
+  counter = 0;
+  moneyText.textContent = "Money: " + "$" + money;
+  refreshText();
+}
+
+sellButton.addEventListener("click", () => {
+  sellPotion();
+});
 
 image.addEventListener("click", () => {
   count();
@@ -49,4 +72,12 @@ image.addEventListener("click", () => {
     { duration: 200 },
   );
 });
-app.append(heading, image, message, counterText);
+app.append(
+  heading,
+  clicksPerSecond,
+  image,
+  message,
+  counterText,
+  moneyText,
+  sellButton,
+);
