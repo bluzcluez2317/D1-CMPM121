@@ -11,20 +11,6 @@ app.style.textAlign = "center";
 const heading = document.createElement("h1");
 heading.textContent = "Cauldron Clicker";
 
-// this will eventually be used for when upgrades are added
-const ouncesPerClick = document.createElement("p");
-let OPC: number = 1; // update this to let whenever we make the upgrades
-ouncesPerClick.textContent = "Ounce per click: " + OPC.toString();
-
-const ouncesPerSecond = document.createElement("p");
-let OPS: number = 0; // update this to let whenever we make the upgrades
-ouncesPerSecond.textContent = "Ounce per second: " + OPS.toString();
-
-const audio: HTMLAudioElement = new Audio("./assets/BG.wav");
-audio.loop = true;
-audio.volume = .1;
-soundPlay(bgMusic);
-
 //=============== Image / Cauldron ====================
 const image = document.createElement("img");
 image.src = tileUrl;
@@ -32,8 +18,38 @@ image.alt = "A cauldron with pink bubbles.";
 image.width = 400;
 image.height = 400;
 
-const message = document.createElement("h3");
-message.textContent = "Click on the Cauldron to make potions!";
+interface upgrade {
+  buttontext: string;
+  price: number;
+  newopc: number;
+  newops: number;
+  numbought: number;
+}
+
+const upgrades: upgrade[] = [{
+  buttontext: "Buy a Witch Helper: $",
+  price: 100,
+  newopc: 1,
+  newops: 0,
+  numbought: 0,
+}, {
+  buttontext: "Buy a Dropper: $",
+  price: 50,
+  newopc: 0,
+  newops: 0.1,
+  numbought: 0,
+}];
+
+const buttons: HTMLButtonElement[] = [];
+
+// this will eventually be used for when upgrades are added
+const ouncesPerClick = document.createElement("p");
+let opc: number = 1; // update this to let whenever we make the upgrades
+ouncesPerClick.textContent = "Ounce per click: " + opc.toString();
+
+const ouncesPerSecond = document.createElement("p");
+let ops: number = 0; // update this to let whenever we make the upgrades
+ouncesPerSecond.textContent = "Ounce per second: " + ops.toString();
 
 // ============= Potion Text and Info =============================================
 // Counts the amount of times the image has been clicked
@@ -42,7 +58,6 @@ const counterText = document.createElement("p");
 counterText.textContent = "Ounces of potion: ";
 const counterElement = document.createElement("span");
 counterText.appendChild(counterElement); // puts counter element number on the page
-refreshText();
 
 // ========= Money ============================
 let money: number = 0;
@@ -53,110 +68,13 @@ const sellButton = document.createElement("button");
 sellButton.textContent = "Sell potions";
 sellButton.type = "button";
 
-// ============= Upgrade Button Ounces Per Click + 1 =====================
-const witchHelperUpgrade = document.createElement("button");
-witchHelperUpgrade.type = "button";
-let initialWitchHelperPrice: number = 100;
-let witchCount: number = 0;
-witchHelperUpgrade.textContent =
-  `Buy a Witch Helper(${witchCount}): $${initialWitchHelperPrice} (+1 ounce per click)`;
+const audio: HTMLAudioElement = new Audio("./assets/BG.wav");
+audio.loop = true;
+audio.volume = .1;
+soundPlay(bgMusic);
 
-// ============= Upgrade Button Ounces Per Second +.1 ===================
-const dropperUpgrade = document.createElement("button");
-dropperUpgrade.type = "button";
-let initialdropperUpgradePrice: number = 50;
-let dropperCount: number = 0;
-dropperUpgrade.textContent =
-  `Buy a Dropper(${dropperCount}): $${initialdropperUpgradePrice} (+.1 ounce per second)`;
-
-refreshMoney();
-// =========== Timer ===============================
-function timer() {
-  let last = performance.now();
-  setInterval(
-    () => {
-      const now = performance.now();
-      const seconds = (now - last) / 1000;
-      last = now;
-      counter += OPS * seconds;
-      refreshText();
-    },
-    1000, // in ms
-  );
-}
-timer();
-
-//======================== Functions =====================
-function refreshText() {
-  counterElement.textContent = counter.toFixed(1) + " oz";
-}
-
-function refreshMoney() {
-  moneyText.textContent = "Money: $" + money.toFixed(2);
-  witchHelperUpgrade.disabled = money < initialWitchHelperPrice;
-  dropperUpgrade.disabled = money < initialdropperUpgradePrice;
-}
-
-function count() {
-  counter += OPC;
-}
-
-function sellPotion() {
-  money += counter;
-  counter = 0;
-  refreshText();
-  refreshMoney();
-}
-
-function soundPlay(url: string): void {
-  const audio = new Audio(url);
-  audio.play().catch((error) => {
-    console.error("Playback Failed", error);
-  });
-}
-
-//======================== Event Listeners =====================
-sellButton.addEventListener("click", () => {
-  sellPotion();
-});
-
-witchHelperUpgrade.addEventListener("click", () => {
-  money -= initialWitchHelperPrice;
-  OPC += 1;
-  initialWitchHelperPrice = initialWitchHelperPrice * 1.5;
-  console.log("OPC " + OPC);
-  witchCount += 1;
-  ouncesPerClick.textContent = "Ounce per click: " + OPC.toString();
-  witchHelperUpgrade.textContent =
-    `Buy a Witch Helper(${witchCount}): $${initialWitchHelperPrice} (+1 ounce per click)`;
-  refreshMoney();
-});
-
-dropperUpgrade.addEventListener("click", () => {
-  money -= initialdropperUpgradePrice;
-  OPS += 0.1;
-  initialdropperUpgradePrice = initialdropperUpgradePrice * 1.5;
-  console.log("OPS " + OPS);
-  dropperCount += 1;
-  ouncesPerSecond.textContent = "Ounce per second: " + OPS.toString();
-  dropperUpgrade.textContent =
-    `Buy a Dropper(${dropperCount}): $${initialdropperUpgradePrice} (+.1 ounce per second)`;
-  refreshMoney();
-});
-
-image.addEventListener("click", () => {
-  count();
-  refreshText();
-  soundPlay(bubblesUrl);
-  image.animate(
-    [{ transform: "scale(1)" }, { transform: "scale(1.1)" }, {
-      transform: "scale(1)",
-    }],
-    { duration: 200 },
-  );
-});
-
-//======================== Everything on the Page =====================
+const message = document.createElement("h3");
+message.textContent = "Click on the Cauldron to make potions!";
 
 app.append(
   heading,
@@ -167,6 +85,86 @@ app.append(
   counterText,
   sellButton,
   moneyText,
-  witchHelperUpgrade,
-  dropperUpgrade,
+  // witchHelperUpgrade,
+  // dropperUpgrade,
 );
+
+function refreshText() {
+  counterElement.textContent = counter.toFixed(1) + " oz";
+  moneyText.textContent = "Money: $" + money.toFixed(2);
+  ouncesPerSecond.textContent = "Ounce per second: " + ops.toString();
+  ouncesPerClick.textContent = "Ounce per click: " + opc.toString();
+}
+
+function soundPlay(url: string): void {
+  const audio = new Audio(url);
+  audio.play().catch((error) => {
+    console.error("Playback Failed", error);
+  });
+}
+
+sellButton.addEventListener("click", () => {
+  money += counter;
+  counter = 0;
+  refreshText();
+});
+
+image.addEventListener("click", () => {
+  counter += opc;
+  refreshText();
+  soundPlay(bubblesUrl);
+  image.animate(
+    [{ transform: "scale(1)" }, { transform: "scale(1.1)" }, {
+      transform: "scale(1)",
+    }],
+    { duration: 200 },
+  );
+});
+
+for (let i = 0; i < upgrades.length; i++) {
+  const newButton = document.createElement("button");
+  newButton.innerText = upgrades[i].buttontext +
+    upgrades[i].price.toString() + " ";
+  newButton.disabled = true;
+  app.append(newButton, document.createElement("br"));
+  buttons.push(newButton);
+
+  newButton.addEventListener("click", () => {
+    if (money >= upgrades[i].price) {
+      money -= upgrades[i].price;
+      upgrades[i].price += upgrades[i].price / 5;
+      upgrades[i].numbought += 1;
+
+      newButton.innerText = upgrades[i].buttontext + "(" +
+        upgrades[i].price.toFixed(1).toString() + ")";
+
+      ops += upgrades[i].newops; // maybe a future error
+      opc += upgrades[i].newopc;
+
+      refreshText();
+    }
+  });
+}
+
+// =========== Timer ===============================
+function timer() {
+  let last = performance.now();
+  setInterval(
+    () => {
+      const now = performance.now();
+      const seconds = (now - last) / 1000;
+      last = now;
+      counter += ops * seconds;
+      refreshText();
+      for (let i = 0; i < buttons.length; i++) {
+        if (money < upgrades[i].price) {
+          buttons[i].disabled = true;
+        } else {
+          buttons[i].disabled = false;
+        }
+      }
+    },
+    1000, // in ms
+  );
+}
+timer();
