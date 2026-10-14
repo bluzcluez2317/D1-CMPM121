@@ -2,6 +2,7 @@
 // even this tiny example demonstrates a separately deployed asset.
 // @deno-types="./asset-url.d.ts"
 import tileUrl from "./assets/cauldron.png?no-inline";
+import bubblesUrl from "./assets/bubbles.wav?no-inline";
 
 const app = document.querySelector<HTMLElement>("#app")!;
 app.style.textAlign = "center";
@@ -99,6 +100,13 @@ function sellPotion() {
   refreshMoney();
 }
 
+function soundPlay(url: string): void {
+  const audio = new Audio(url);
+  audio.play().catch((error) => {
+    console.error("Playback Failed", error);
+  });
+}
+
 //======================== Event Listeners =====================
 sellButton.addEventListener("click", () => {
   sellPotion();
@@ -129,6 +137,7 @@ dropperUpgrade.addEventListener("click", () => {
 image.addEventListener("click", () => {
   count();
   refreshText();
+  soundPlay(bubblesUrl);
   image.animate(
     [{ transform: "scale(1)" }, { transform: "scale(1.1)" }, {
       transform: "scale(1)",
