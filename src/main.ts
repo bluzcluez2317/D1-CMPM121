@@ -51,15 +51,17 @@ sellButton.type = "button";
 const witchHelperUpgrade = document.createElement("button");
 witchHelperUpgrade.type = "button";
 let initialWitchHelperPrice: number = 100;
+let witchCount: number = 0;
 witchHelperUpgrade.textContent =
-  `Buy a Witch Helper: $${initialWitchHelperPrice} (+1 ounce per click)`;
+  `Buy a Witch Helper(${witchCount}): $${initialWitchHelperPrice} (+1 ounce per click)`;
 
 // ============= Upgrade Button Ounces Per Second +.1 ===================
 const dropperUpgrade = document.createElement("button");
 dropperUpgrade.type = "button";
 let initialdropperUpgradePrice: number = 50;
+let dropperCount: number = 0;
 dropperUpgrade.textContent =
-  `Buy a Dropper: $${initialdropperUpgradePrice} (+.1 ounce per second)`;
+  `Buy a Dropper(${dropperCount}): $${initialdropperUpgradePrice} (+.1 ounce per second)`;
 
 refreshMoney();
 // =========== Timer ===============================
@@ -117,9 +119,10 @@ witchHelperUpgrade.addEventListener("click", () => {
   OPC += 1;
   initialWitchHelperPrice = initialWitchHelperPrice * 1.5;
   console.log("OPC " + OPC);
+  witchCount += 1;
   ouncesPerClick.textContent = "Ounce per click: " + OPC.toString();
   witchHelperUpgrade.textContent =
-    `Buy a Witch Helper: $${initialWitchHelperPrice} (+1 ounce per click)`;
+    `Buy a Witch Helper(${witchCount}): $${initialWitchHelperPrice} (+1 ounce per click)`;
   refreshMoney();
 });
 
@@ -128,9 +131,10 @@ dropperUpgrade.addEventListener("click", () => {
   OPS += 0.1;
   initialdropperUpgradePrice = initialdropperUpgradePrice * 1.5;
   console.log("OPS " + OPS);
+  dropperCount += 1;
   ouncesPerSecond.textContent = "Ounce per second: " + OPS.toString();
   dropperUpgrade.textContent =
-    `Buy a Dropper: $${initialdropperUpgradePrice} (+.1 ounce per second)`;
+    `Buy a Dropper(${dropperCount}): $${initialdropperUpgradePrice} (+.1 ounce per second)`;
   refreshMoney();
 });
 
