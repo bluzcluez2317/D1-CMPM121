@@ -3,6 +3,7 @@
 // @deno-types="./asset-url.d.ts"
 import tileUrl from "./assets/cauldron.png?no-inline";
 import bubblesUrl from "./assets/bubbles.wav?no-inline";
+import bgMusic from "./assets/BG.wav?no-inline";
 
 const app = document.querySelector<HTMLElement>("#app")!;
 app.style.textAlign = "center";
@@ -18,6 +19,11 @@ ouncesPerClick.textContent = "Ounce per click: " + OPC.toString();
 const ouncesPerSecond = document.createElement("p");
 let OPS: number = 0; // update this to let whenever we make the upgrades
 ouncesPerSecond.textContent = "Ounce per second: " + OPS.toString();
+
+const audio: HTMLAudioElement = new Audio("./assets/BG.wav");
+audio.loop = true;
+audio.volume = .1;
+soundPlay(bgMusic);
 
 //=============== Image / Cauldron ====================
 const image = document.createElement("img");
