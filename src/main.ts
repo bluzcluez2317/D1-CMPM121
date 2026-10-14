@@ -51,27 +51,29 @@ const ouncesPerSecond = document.createElement("p");
 let ops: number = 0; // update this to let whenever we make the upgrades
 ouncesPerSecond.textContent = "Ounce per second: " + ops.toString();
 
-// ============= Potion Text and Info =============================================
+// =============== Potion Text and Info ===============
 // Counts the amount of times the image has been clicked
-let counter: number = 500;
+let counter: number = 0;
 const counterText = document.createElement("p");
 counterText.textContent = "Ounces of potion: ";
 const counterElement = document.createElement("span");
 counterText.appendChild(counterElement); // puts counter element number on the page
 
-// ========= Money ============================
+// =============== Money ===============
 let money: number = 0;
 const moneyText = document.createElement("p");
 
-// =========== Sell Button =========================
+// =============== Sell Button ===============
 const sellButton = document.createElement("button");
 sellButton.textContent = "Sell potions";
 sellButton.type = "button";
 
-const audio: HTMLAudioElement = new Audio("./assets/BG.wav");
-audio.loop = true;
-audio.volume = .1;
-soundPlay(bgMusic);
+const music = new Audio(bgMusic);
+music.loop = true;
+music.volume = .1;
+let musicStarted = false;
+
+const bubbles = new Audio(bubblesUrl);
 
 const message = document.createElement("h3");
 message.textContent = "Click on the Cauldron to make potions!";
@@ -96,13 +98,6 @@ function refreshText() {
   ouncesPerClick.textContent = "Ounce per click: " + opc.toString();
 }
 
-function soundPlay(url: string): void {
-  const audio = new Audio(url);
-  audio.play().catch((error) => {
-    console.error("Playback Failed", error);
-  });
-}
-
 sellButton.addEventListener("click", () => {
   money += counter;
   counter = 0;
@@ -112,7 +107,16 @@ sellButton.addEventListener("click", () => {
 image.addEventListener("click", () => {
   counter += opc;
   refreshText();
-  soundPlay(bubblesUrl);
+
+  if (!musicStarted) {
+    musicStarted = true;
+    music.play().catch((e) => console.error("Music failed", e));
+  }
+  refreshText();
+
+  bubbles.currentTime = 0; // restart so rapid clicks still make a sound
+  bubbles.play().catch((e) => console.error("Bubbles failed", e));
+
   image.animate(
     [{ transform: "scale(1)" }, { transform: "scale(1.1)" }, {
       transform: "scale(1)",
@@ -139,7 +143,7 @@ for (let i = 0; i < upgrades.length; i++) {
         upgrades[i].price.toFixed(1).toString() + ") " +
         "\nOwned: (" + upgrades[i].numbought + ") ";
 
-      ops += upgrades[i].newops; // maybe a future error
+      ops += upgrades[i].newops;
       opc += upgrades[i].newopc;
 
       refreshText();
@@ -147,7 +151,7 @@ for (let i = 0; i < upgrades.length; i++) {
   });
 }
 
-// =========== Timer ===============================
+// =============== Timer ===============
 function timer() {
   let last = performance.now();
   setInterval(
@@ -165,7 +169,7 @@ function timer() {
         }
       }
     },
-    1000, // in ms
+    1000,
   );
 }
 timer();
