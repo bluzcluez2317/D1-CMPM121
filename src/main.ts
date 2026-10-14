@@ -53,7 +53,7 @@ ouncesPerSecond.textContent = "Ounce per second: " + ops.toString();
 
 // ============= Potion Text and Info =============================================
 // Counts the amount of times the image has been clicked
-let counter: number = 0;
+let counter: number = 500;
 const counterText = document.createElement("p");
 counterText.textContent = "Ounces of potion: ";
 const counterElement = document.createElement("span");
@@ -136,7 +136,8 @@ for (let i = 0; i < upgrades.length; i++) {
       upgrades[i].numbought += 1;
 
       newButton.innerText = upgrades[i].buttontext + "(" +
-        upgrades[i].price.toFixed(1).toString() + ")";
+        upgrades[i].price.toFixed(1).toString() + ") " +
+        "\nOwned: (" + upgrades[i].numbought + ") ";
 
       ops += upgrades[i].newops; // maybe a future error
       opc += upgrades[i].newopc;
