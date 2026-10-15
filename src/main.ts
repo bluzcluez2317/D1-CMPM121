@@ -4,6 +4,10 @@
 import tileUrl from "./assets/cauldron.png?no-inline";
 import bubblesUrl from "./assets/bubbles.wav?no-inline";
 
+// added Sound Effects from Jack Farris
+import dropperSound from "./assets/Witch_drink1.ogg";
+import witchCackle from "./assets/Witch_idle2.ogg";
+
 const app = document.querySelector<HTMLElement>("#app")!;
 app.style.textAlign = "center";
 
@@ -113,6 +117,7 @@ sellButton.addEventListener("click", () => {
 });
 
 witchHelperUpgrade.addEventListener("click", () => {
+  soundPlay(witchCackle);
   money -= initialWitchHelperPrice;
   OPC += 1;
   initialWitchHelperPrice = initialWitchHelperPrice * 1.5;
@@ -124,6 +129,7 @@ witchHelperUpgrade.addEventListener("click", () => {
 });
 
 dropperUpgrade.addEventListener("click", () => {
+  soundPlay(dropperSound);
   money -= initialdropperUpgradePrice;
   OPS += 0.1;
   initialdropperUpgradePrice = initialdropperUpgradePrice * 1.5;

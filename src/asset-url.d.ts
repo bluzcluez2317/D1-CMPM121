@@ -6,3 +6,9 @@ declare module "*.wav?no-inline" {
   const url: string;
   export default url;
 }
+
+// Jack uses ogg files
+declare module "*.ogg?no-inline" {
+  const url: string;
+  export default url;
+}
