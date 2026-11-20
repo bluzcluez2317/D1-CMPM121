@@ -87,8 +87,6 @@ app.append(
   counterText,
   sellButton,
   moneyText,
-  // witchHelperUpgrade,
-  // dropperUpgrade,
 );
 
 function refreshText() {
