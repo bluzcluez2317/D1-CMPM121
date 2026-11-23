@@ -17,18 +17,20 @@ A minimal TypeScript/Vite browser project with Deno checks and GitHub Pages depl
 
 - Clone this project in VS Code
 - Run `deno task setup`
+- Run `deno task build` to build
 - Run `deno task dev` to play!
+
 
 ## Developer Section
 
-[Upgrade Data](https://github.com/bluzcluez2317/D1-CMPM121/blob/main/src/main.ts#L21-L41)
+[Link to Upgrade Data](https://github.com/bluzcluez2317/D1-CMPM121/blob/main/src/main.ts#L21-L41)
 
-[Shared purchase loop](https://github.com/bluzcluez2317/D1-CMPM121/blob/main/src/main.ts#L128-L152)
+[Link to shared purchase loop](https://github.com/bluzcluez2317/D1-CMPM121/blob/main/src/main.ts#L128-L152)
 
 ## Sound revision
 
 The fixed sound revision was needed because the bubble sounds wasn't working with the background music so we got rid of the soundPlay() function and added an if statement to make the background music started on the first click and like that the bubble sound was able to be heard along with the background music.
-[Fixed sound](https://github.com/bluzcluez2317/D1-CMPM121/commit/7f0484d8b026f16b1853a9bb1c4e81a4586e5399)
+[Fixed sound commit](https://github.com/bluzcluez2317/D1-CMPM121/commit/7f0484d8b026f16b1853a9bb1c4e81a4586e5399) In the fixed sound commit we fixed the code smell that we encountered which was repeated object creation and mixed responsibilities. In `soundPlay()`, we used to be creating a new Audio object on every click. Once we applied the Single Responsibility Principle, we separated audio initialization from the event handler, which makes it so that we now keep persistent music and bubble sounds and restart the bubble sound for rapid clicks. After making these changes, it is now easier to swap audio files and adjust volume without affecting the event handler.
 
 ## Credits
 
